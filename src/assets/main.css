@@ -1,0 +1,85 @@
+/* 全局样式 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fafafa;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .nav {
+    justify-content: center;
+  }
+  
+  .main {
+    padding: 10px;
+  }
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 诗词卡片样式 */
+.poem-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.poem-card:hover {
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.poem-content {
+  line-height: 1.8;
+  font-size: 16px;
+  color: #333;
+}
+
+.poem-meta {
+  color: #666;
+  font-size: 14px;
+}
+
+/* 动画效果 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
