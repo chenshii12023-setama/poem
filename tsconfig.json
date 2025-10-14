@@ -11,11 +11,12 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "target": "ESNext",
     "declaration": true,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": true, // 确保这个设置是存在的且为 true
+    "declarationDir": "./dist/types", // 确保这个设置也存在，避免 TS5055 错误
     "paths": {
       "@/*": ["./src/*"]
     }
