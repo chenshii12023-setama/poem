@@ -1,97 +1,74 @@
 <template>
   <div id="app">
-    <el-container class="layout-container">
-      <el-header class="header">
-        <div class="header-content">
-          <h1 class="title">诗词应用</h1>
-          <nav class="nav">
-            <router-link to="/" class="nav-link">
-              <el-button type="text">首页</el-button>
-            </router-link>
-            <router-link to="/poems" class="nav-link">
-              <el-button type="text">诗词</el-button>
-            </router-link>
-            <router-link to="/about" class="nav-link">
-              <el-button type="text">关于</el-button>
-            </router-link>
-          </nav>
-        </div>
-      </el-header>
-      
-      <el-main class="main">
-        <router-view />
-      </el-main>
-      
-      <el-footer class="footer">
-        <p>&copy; 2024 诗词应用 - 传承中华诗词文化</p>
-      </el-footer>
-    </el-container>
+    <nav class="navbar">
+      <router-link to="/" class="logo">诗词赏析</router-link>
+      <div class="nav-links">
+        <router-link to="/">首页</router-link>
+        <router-link to="/login" v-if="!user">登录</router-link>
+        <template v-else>
+          <router-link to="/profile">个人中心</router-link>
+          <button @click="logout">退出</button>
+        </template>
+      </div>
+    </nav>
+    <router-view/>
   </div>
 </template>
 
-<script setup lang="ts">
-// 使用Composition API和setup语法糖
-// 这里可以添加全局的逻辑
+<script>
+export default {
+  data() {
+    return {
+      user: null // TODO: 从store或localStorage获取用户信息
+    }
+  },
+  methods: {
+    logout() {
+      // TODO: 实现退出登录
+    }
+  }
+}
 </script>
 
-<style scoped>
-.layout-container {
-  min-height: 100vh;
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
 }
 
-.header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-
-.header-content {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
+  background: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.title {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
 }
 
-.nav {
+.nav-links {
   display: flex;
   gap: 20px;
+  align-items: center;
 }
 
-.nav-link {
+.nav-links a {
   text-decoration: none;
+  color: #333;
 }
 
-.nav-link :deep(.el-button) {
-  color: white;
-  font-size: 16px;
-}
-
-.nav-link :deep(.el-button:hover) {
-  color: #f0f0f0;
-}
-
-.main {
-  flex: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.footer {
-  background-color: #f5f5f5;
-  text-align: center;
-  color: #666;
-}
-
-.footer p {
-  margin: 0;
+.nav-links button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
 }
 </style>
