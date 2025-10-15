@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PoemList from '@/views/PoemList.vue'
-import PoemDetail from '@/views/PoemDetail.vue'
+const PoemList = () => import('@/views/PoemList.vue')
+const PoemDetail = () => import('@/views/PoemDetail.vue')
 
 const routes = [
   {

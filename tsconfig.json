@@ -3,10 +3,13 @@
   "include": [
     "env.d.ts",
     "src/**/*",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/**/*.ts",
+    "src/**/*.js"
   ],
   "exclude": [
-    "src/**/__tests__/*"
+    "src/**/__tests__/*",
+    "node_modules"
   ],
   "compilerOptions": {
     "composite": true,
@@ -14,11 +17,17 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "target": "ESNext",
+    "allowJs": true,
+
+    "strict": true,
+    "esModuleInterop": true,
     "declaration": true,
-    "emitDeclarationOnly": true, // 确保这个设置是存在的且为 true
-    "declarationDir": "./dist/types", // 确保这个设置也存在，避免 TS5055 错误
+    "noEmit": true,
+    "skipLibCheck": true,
+    "declarationDir": "./dist/types",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["vite/client"]
   }
 }

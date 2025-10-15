@@ -47,7 +47,14 @@
 </template>
 
 <script>
-import { getPoemById, toggleFavorite, addComment } from '@/utils/db'
+let dbUtils = null
+
+async function loadDbUtils() {
+  if (!dbUtils) {
+    dbUtils = await import('@/utils/db')
+  }
+  return dbUtils
+}
 
 export default {
   data() {

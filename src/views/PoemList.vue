@@ -34,7 +34,14 @@
 </template>
 
 <script>
-import { getPoems, searchPoems } from '@/utils/db'
+let dbUtils = null
+
+async function loadDbUtils() {
+  if (!dbUtils) {
+    dbUtils = await import('@/utils/db')
+  }
+  return dbUtils
+}
 
 export default {
   data() {
