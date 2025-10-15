@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <nav class="navbar">
-      <router-link to="/" class="logo">诗词赏析</router-link>
+      <router-link to="/poems" class="logo">诗词赏析</router-link>
       <div class="nav-links">
-        <router-link to="/">首页</router-link>
+        <router-link to="/poems">首页</router-link>
         <router-link to="/login" v-if="!user">登录</router-link>
         <template v-else>
           <router-link to="/profile">个人中心</router-link>
