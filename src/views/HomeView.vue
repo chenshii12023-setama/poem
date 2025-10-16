@@ -33,7 +33,7 @@
     <div class="recommended-section">
       <h3>今日推荐</h3>
       <el-row :gutter="20">
-        <el-col :xs="24" :md="12" v-for="poem in recommendedPoems" :key="poem.id">
+        <el-col :xs="24" :md="8" v-for="poem in recommendedPoems" :key="poem.id">
           <el-card class="poem-card" shadow="hover">
             <div class="poem-header">
               <h4>{{ poem.title }}</h4>
@@ -55,6 +55,15 @@
           </el-card>
         </el-col>
       </el-row>
+      <el-pagination
+        v-model:current-page="currentPage"
+        :page-size="pageSize"
+        :total="totalPoems"
+        layout="prev, pager, next"
+        @current-change="handlePageChange"
+        class="pagination"
+        :hide-on-single-page="true"
+      />
     </div>
   </div>
 </template>
@@ -63,7 +72,21 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePoemStore } from '@/stores/counter'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
+import { getPoems, supabase } from '@/utils/db'
+
+interface Author {
+  name?: string
+  dynasty?: string
+}
+
+interface Poem {
+  id: number
+  title: string
+  author: string
+  dynasty: string
+  content: string
+}
 
 const router = useRouter()
 const poemStore = usePoemStore()
@@ -94,22 +117,12 @@ const features = ref([
 ])
 
 // 推荐诗词数据
-const recommendedPoems = ref([
-  {
-    id: 1,
-    title: '静夜思',
-    author: '李白',
-    dynasty: '唐',
-    content: '床前明月光，疑是地上霜。举头望明月，低头思故乡。'
-  },
-  {
-    id: 2,
-    title: '春晓',
-    author: '孟浩然',
-    dynasty: '唐',
-    content: '春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。'
-  }
-])
+const recommendedPoems = ref<Poem[]>([])
+const loading = ref(false)
+const error = ref<Error | null>(null)
+const currentPage = ref(1)
+const pageSize = 6
+const totalPoems = ref(0)
 
 // 跳转到诗词页面
 const goToPoems = () => {
@@ -122,8 +135,52 @@ const addToFavorites = (poem: any) => {
   ElMessage.success('已添加到收藏')
 }
 
+interface PoemResponse {
+  data: Poem[]
+  count: number
+}
+
+const allPoems = ref<Poem[]>([])
+
+const fetchPoems = async (page = 1) => {
+  loading.value = true
+  try {
+    const from = (page - 1) * pageSize
+    const to = from + pageSize - 1
+    
+    const { data: poems, error, count } = await supabase
+      .from('poems')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to)
+
+    if (!error) {
+      recommendedPoems.value = poems.map(p => ({
+        id: p.id,
+        title: p.title,
+        author: p.author || '未知',
+        dynasty: p.dynasty || '未知',
+        content: p.content.split('。').join('。')
+      }))
+      totalPoems.value = count || 0
+    } else {
+      throw error
+    }
+  } catch (err) {
+    error.value = err instanceof Error ? err : new Error(String(err))
+    ElMessage.error('获取诗词数据失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page
+  fetchPoems(page)
+}
+
 onMounted(() => {
-  // 组件挂载时的逻辑
+  fetchPoems()
 })
 </script>
 
@@ -215,6 +272,11 @@ onMounted(() => {
 .poem-actions {
   display: flex;
   gap: 16px;
+}
+
+.pagination {
+  margin-top: 20px;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {

@@ -15,13 +15,13 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
 
 // 诗词相关操作
 export async function getPoems(page = 1, limit = 10) {
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from('poems')
-    .select('*, authors(*)')
+    .select('*, authors(*)', { count: 'exact' })
     .range((page-1)*limit, page*limit-1)
   
   if (error) throw error
-  return data
+  return { data, count }
 }
 
 export async function getPoemById(id) {

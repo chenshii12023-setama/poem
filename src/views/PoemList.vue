@@ -28,27 +28,26 @@
     <div class="pagination">
       <button @click="prevPage" :disabled="page === 1">上一页</button>
       <span>第 {{ page }} 页</span>
-      <button @click="nextPage">下一页</button>
+      <button @click="nextPage" :disabled="page >= Math.ceil(totalCount / limit)">下一页</button>
     </div>
   </div>
 </template>
 
 <script>
-let dbUtils = null
+import { createClient } from '@supabase/supabase-js'
+import { ElMessage } from 'element-plus'
 
-async function loadDbUtils() {
-  if (!dbUtils) {
-    dbUtils = await import('@/utils/db')
-  }
-  return dbUtils
-}
+const supabaseUrl = 'https://fddcpkytlhkiuynekjrh.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkZGNwa3l0bGhraXV5bmVranJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NjgzNTUsImV4cCI6MjA3NjA0NDM1NX0.UcDnwdYTBbQikXP2-xxqf2IVmnCHHQLORH2B44cU1XI'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default {
   data() {
     return {
       poems: [],
       page: 1,
-      limit: 10,
+      limit: 9,
+      totalCount: 0,
       searchQuery: ''
     }
   },
@@ -57,7 +56,26 @@ export default {
   },
   methods: {
     async fetchPoems() {
-      this.poems = await getPoems(this.page, this.limit)
+      try {
+        const from = (this.page - 1) * this.limit
+        const to = from + this.limit - 1
+        
+        const { data, error, count } = await supabase
+          .from('poems')
+          .select('*', { count: 'exact' })
+          .order('created_at', { ascending: false })
+          .range(from, to)
+
+        if (error) throw error
+        
+        this.poems = data || []
+        this.totalCount = count || 0
+        
+      } catch (err) {
+        console.error('获取诗词失败:', err)
+        ElMessage.error('获取诗词数据失败，请稍后重试')
+        this.poems = []
+      }
     },
     async searchPoems() {
       if (this.searchQuery.trim()) {
