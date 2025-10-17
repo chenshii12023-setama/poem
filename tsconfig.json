@@ -1,5 +1,23 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "compilerOptions": {
+    "lib": ["DOM", "ES2020"],
+    "module": "ESNext",
+    "target": "ES2020",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["vite/client"]
+  },
   "include": [
     "env.d.ts",
     "src/**/*",
@@ -10,24 +28,5 @@
   "exclude": [
     "src/**/__tests__/*",
     "node_modules"
-  ],
-  "compilerOptions": {
-    "composite": true,
-    "baseUrl": ".",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ESNext",
-    "allowJs": true,
-
-    "strict": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "noEmit": true,
-    "skipLibCheck": true,
-    "declarationDir": "./dist/types",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "types": ["vite/client"]
-  }
+  ]
 }

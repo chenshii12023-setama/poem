@@ -1,32 +1,30 @@
 <template>
   <div id="app">
-    <nav class="navbar">
+    <nav class="navbar" v-if="isAuthenticated">
       <router-link to="/poems" class="logo">诗词赏析</router-link>
       <div class="nav-links">
         <router-link to="/poems">首页</router-link>
-        <router-link to="/login" v-if="!user">登录</router-link>
-        <template v-else>
-          <router-link to="/profile">个人中心</router-link>
-          <button @click="logout">退出</button>
-        </template>
+        <router-link to="/profile">个人中心</router-link>
+        <button @click="handleLogout">退出</button>
       </div>
     </nav>
     <router-view/>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      user: null // TODO: 从store或localStorage获取用户信息
-    }
-  },
-  methods: {
-    logout() {
-      // TODO: 实现退出登录
-    }
-  }
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+
+const authStore = useAuthStore()
+const router = useRouter()
+
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
 }
 </script>
 
