@@ -3,11 +3,14 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Supabase URL and Key must be set in .env file')
-}
+// 提供默认值用于演示，实际部署时需要设置环境变量
+const demoUrl = 'https://fddcpkytlhkiuynekjrh.supabase.co'
+const demoKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkZGNwa3l0bGhraXV5bmVranJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NjgzNTUsImV4cCI6MjA3NjA0NDM1NX0.UcDnwdYTBbQikXP2-xxqf2IVmnCHHQLORH2B44cU1XI'
 
-export const supabase = createClient(supabaseUrl, supabaseKey, {
+const finalUrl = supabaseUrl || demoUrl
+const finalKey = supabaseKey || demoKey
+
+export const supabase = createClient(finalUrl, finalKey, {
   auth: {
     persistSession: false
   }
