@@ -94,7 +94,7 @@ export default {
     /** ✅ 最终修正版：支持 n8n 文本/JSON 返回 */
     async simulateAIResponse(userMessage) {
       try {
-        const response = await fetch('http://localhost:5678/webhook-test/analyze-poem', {
+        const response = await fetch('http://localhost:5678/webhook/analyze-poem', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
