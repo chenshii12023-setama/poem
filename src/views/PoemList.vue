@@ -1,6 +1,10 @@
 <template>
   <div class="poem-list">
     <h1>诗词赏析</h1>
+    
+    <!-- AI对话机器人组件 -->
+    <AIChatBot />
+    
     <div class="search-box">
       <input 
         v-model="searchQuery" 
@@ -36,12 +40,16 @@
 <script>
 import { createClient } from '@supabase/supabase-js'
 import { ElMessage } from 'element-plus'
+import AIChatBot from '@/components/AIChatBot.vue'
 
 const supabaseUrl = 'https://fddcpkytlhkiuynekjrh.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZkZGNwa3l0bGhraXV5bmVranJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NjgzNTUsImV4cCI6MjA3NjA0NDM1NX0.UcDnwdYTBbQikXP2-xxqf2IVmnCHHQLORH2B44cU1XI'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default {
+  components: {
+    AIChatBot
+  },
   data() {
     return {
       poems: [],
@@ -85,7 +93,7 @@ export default {
       }
     },
     viewPoemDetail(id) {
-      this.$router.push(`/poem/${id}`)
+      this.$router.push(`/poems/${id}`)
     },
     async nextPage() {
       this.page++

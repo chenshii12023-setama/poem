@@ -21,6 +21,8 @@
       </button>
     </div>
     
+
+    
     <div class="annotations">
       <h3>注释</h3>
       <p v-for="anno in poem.annotations" :key="anno.id">
@@ -47,6 +49,8 @@
 </template>
 
 <script>
+import { getPoemById, toggleFavorite, addComment } from '@/utils/db'
+
 let dbUtils = null
 
 async function loadDbUtils() {
